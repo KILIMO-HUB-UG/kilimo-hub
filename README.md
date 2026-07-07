@@ -1,16 +1,16 @@
-# Kilimo Hub — Ugandan Farmer Information Hub
+# Kilimo Hub-Ugandan Farmer Information Hub
 
 A Django web application providing Ugandan farmers with accessible agricultural information
 through web, mobile, SMS (*217#), and USSD channels.
 
 ## Features
-- **Dashboard** — alerts, prices, weather at a glance
-- **Crop Guidance** — planting calendars, AI chat advisor, variety info
-- **Market Prices** — real-time prices from Kampala & regional markets
-- **Disease Detection** — photo upload with AI diagnosis
-- **Veterinary Advice** — AI vet chat + vaccination calendar
-- **Weather** — 7-day forecast with farming advisories
-- **SMS/USSD** — *217# and SMS 8217 for non-smartphone access
+- **Dashboard**-alerts, prices, weather at a glance
+- **Crop Guidance**-planting calendars, AI chat advisor, variety info
+- **Market Prices**-real-time prices from Kampala & regional markets
+- **Disease Detection**-photo upload with AI diagnosis
+- **Veterinary Advice**-AI vet chat + vaccination calendar
+- **Weather**-7-day forecast with farming advisories
+- **SMS/USSD**-*217# and SMS 8217 for non-smartphone access
 
 ## Setup
 ```bash
@@ -52,11 +52,11 @@ kilimo_hub/
 ```
 
 ## SMS Commands (to 8217)
-- `PRICE MAIZE` — Latest maize prices
-- `WEATHER MUKONO` — Mukono weather
-- `CROP MAIZE PLANT` — Maize planting guide
-- `DISEASE MAIZE` — Maize disease alerts
-- `VET COW FEVER` — Vet advice for cow with fever
+- `PRICE MAIZE`-Latest maize prices
+- `WEATHER MUKONO`-Mukono weather
+- `CROP MAIZE PLANT`-Maize planting guide
+- `DISEASE MAIZE`-Maize disease alerts
+- `VET COW FEVER`-Vet advice for cow with fever
 
 ## Languages Supported
 - English (EN)
