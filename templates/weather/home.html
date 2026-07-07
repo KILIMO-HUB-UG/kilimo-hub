@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Weather{% endblock %}
+{% block nav_weather %}active{% endblock %}
+{% block topbar %}
+<div class="topbar">
+  <button class="hamburger" onclick="openSidebar()" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-title">Weather — {{ district }}</div>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+    {% if forecast.source == 'live' %}
+      <span class="badge badge-green">Live data</span>
+    {% elif forecast.stale %}
+      <span class="badge badge-amber">Cached</span>
+    {% else %}
+      <span class="badge" style="background:var(--gray-bg);color:var(--text-muted)">Demo data</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% if forecast.source == 'mock' %}
+<div class="alert-strip warning" style="border-radius:8px;margin-bottom:14px">
+  <strong>Live weather not configured.</strong>
+  Add your <code>OPENWEATHER_API_KEY</code> to your <code>.env</code> file to see real weather data.
+</div>
+{% endif %}
+
+<!-- Current conditions -->
+<div class="grid-2" style="margin-bottom:14px">
+  <div class="card" style="display:flex;align-items:center;gap:20px">
+    <div>
+      <div style="font-size:52px;font-weight:600;line-height:1;color:var(--text-main)">{{ forecast.current.temp }}°C</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:4px" class="translatable">{{ forecast.current.desc }}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Feels like {{ forecast.current.feels_like|default:forecast.current.temp }}°C</div>
+    </div>
+    <div style="font-size:13px;line-height:2.2;color:var(--text-muted)">
+      <div><strong style="color:var(--text-main)">Humidity</strong> {{ forecast.current.humidity }}%</div>
+      <div><strong style="color:var(--text-main)">Wind</strong> {{ forecast.current.wind }}</div>
+      {% if forecast.current.visibility %}<div><strong style="color:var(--text-main)">Visibility</strong> {{ forecast.current.visibility }} km</div>{% endif %}
+      {% if forecast.current.pressure %}<div><strong style="color:var(--text-main)">Pressure</strong> {{ forecast.current.pressure }} hPa</div>{% endif %}
+    </div>
+  </div>
+  <div class="card" style="background:#E6F1FB;border-color:#B5D4F4">
+    <div style="font-size:12px;font-weight:600;color:#0C447C;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Planting Advisory</div>
+    <div style="font-size:13px;color:#185FA5;line-height:1.7" class="translatable">{{ forecast.advisory }}</div>
+  </div>
+</div>
+
+<!-- 7-day forecast -->
+<div class="section-title">7-day forecast</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px">
+  {% for day in forecast.forecast %}
+  <div class="card" style="text-align:center;padding:12px 4px">
+    <div style="font-size:10px;color:var(--text-muted);margin-bottom:5px;font-weight:500">{{ day.day }}</div>
+    <div style="margin-bottom:6px">
+      {% if day.desc == 'Clear' %}
+        <svg viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" style="width:24px;height:24px;margin:0 auto;display:block"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      {% elif day.desc == 'Rain' or day.desc == 'Showers' %}
+        <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" style="width:24px;height:24px;margin:0 auto;display:block"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/><line x1="8" y1="19" x2="8" y2="21"/><line x1="8" y1="13" x2="8" y2="15"/><line x1="16" y1="19" x2="16" y2="21"/><line x1="16" y1="13" x2="16" y2="15"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="12" y1="15" x2="12" y2="17"/></svg>
+      {% elif day.desc == 'Thunderstorm' %}
+        <svg viewBox="0 0 24 24" fill="none" stroke="#854F0B" stroke-width="2" style="width:24px;height:24px;margin:0 auto;display:block"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><polyline points="13 11 9 17 15 17 11 23"/></svg>
+      {% else %}
+        <svg viewBox="0 0 24 24" fill="none" stroke="#6b6b65" stroke-width="2" style="width:24px;height:24px;margin:0 auto;display:block"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+      {% endif %}
+    </div>
+    <div style="font-size:14px;font-weight:600">{{ day.temp_hi }}°</div>
+    <div style="font-size:10px;color:var(--text-muted)">{{ day.temp_lo }}°</div>
+    {% if day.rain_mm %}<div style="font-size:10px;color:#185FA5;margin-top:3px">{{ day.rain_mm }}mm</div>{% endif %}
+    <div style="font-size:10px;color:var(--text-muted);margin-top:2px" class="translatable">{{ day.desc }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- District selector -->
+<div class="section-title">Select district</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+  {% for d in districts %}
+  <a href="?district={{ d }}" class="btn {% if d == district %}btn-primary{% else %}btn-outline{% endif %}" style="width:auto;font-size:12px;padding:6px 12px">{{ d }}</a>
+  {% endfor %}
+</div>
+
+{% if forecast.fetched_at %}
+<div style="margin-top:14px;font-size:11px;color:var(--text-muted)">
+  Data source: OpenWeatherMap ·
+  {% if forecast.from_cache %}Cached{% else %}Just fetched{% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

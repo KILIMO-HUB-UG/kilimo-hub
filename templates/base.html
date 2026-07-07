@@ -1,0 +1,392 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Kilimo Hub{% endblock %} | Farmer Information Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-dark:#0F6E56;--green-mid:#1D9E75;--green-light:#E1F5EE;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--amber-dark:#854F0B;
+  --red:#E24B4A;--red-light:#FCEBEB;--red-dark:#A32D2D;
+  --blue:#185FA5;--blue-light:#E6F1FB;
+  --gray-bg:#F7F7F5;--gray-border:#E4E4E0;
+  --text-main:#1a1a18;--text-muted:#6b6b65;
+  --white:#ffffff;--radius:10px;--sidebar-width:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",sans-serif;background:var(--gray-bg);color:var(--text-main);font-size:14px}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-width);background:var(--white);border-right:1px solid var(--gray-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;transition:transform 0.25s ease}
+.main{margin-left:var(--sidebar-width);flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* ── SIDEBAR ── */
+.sidebar-logo{padding:16px 18px;border-bottom:1px solid var(--gray-border);display:flex;align-items:center;gap:10px}
+.sidebar-logo img{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.logo-name{font-size:14px;font-weight:600;color:var(--text-main);line-height:1.2}
+.logo-sub{font-size:10px;color:var(--text-muted)}
+nav{padding:10px 0;flex:1;overflow-y:auto}
+.nav-section{font-size:10px;font-weight:600;color:var(--text-muted);padding:10px 18px 4px;text-transform:uppercase;letter-spacing:.08em}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;color:var(--text-muted);border-left:3px solid transparent;transition:all .15s}
+.nav-item:hover{background:var(--gray-bg);color:var(--text-main)}
+.nav-item.active{color:var(--green-dark);border-left-color:var(--green-mid);background:var(--green-light);font-weight:500}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+.sidebar-footer{padding:12px 18px;border-top:1px solid var(--gray-border);font-size:11px;color:var(--text-muted)}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--white);border-bottom:1px solid var(--gray-border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px}
+.topbar-title{font-size:15px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;color:var(--text-main);flex-shrink:0}
+.hamburger svg{width:22px;height:22px;display:block}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150}
+
+/* ── CONTENT ── */
+.content{padding:20px;flex:1}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1px solid var(--gray-border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:opacity .15s;font-family:inherit}
+.btn-primary{background:var(--green-mid);color:white}
+.btn-primary:hover{opacity:.9}
+.btn-outline{background:white;border:1px solid var(--gray-border);color:var(--text-main)}
+.btn-outline:hover{background:var(--gray-bg)}
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px}
+.badge-green{background:#EAF3DE;color:#27500A}
+.badge-amber{background:var(--amber-light);color:var(--amber-dark)}
+.badge-red{background:var(--red-light);color:var(--red-dark)}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.section-title{font-size:13px;font-weight:600;margin-bottom:10px}
+.alert-strip{border-radius:0;padding:11px 16px;margin-bottom:8px;font-size:13px;line-height:1.5;border-left:3px solid transparent}
+.alert-strip.danger{background:var(--red-light);border-left-color:var(--red);color:var(--red-dark)}
+.alert-strip.warning{background:var(--amber-light);border-left-color:var(--amber);color:var(--amber-dark)}
+.alert-strip.info{background:var(--blue-light);border-left-color:var(--blue);color:var(--blue)}
+
+/* ── GRIDS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* ── STAT CARDS ── */
+.stat-card{background:var(--gray-bg);border-radius:8px;padding:14px}
+.stat-label{font-size:11px;color:var(--text-muted);margin-bottom:4px}
+.stat-value{font-size:22px;font-weight:600}
+.stat-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+/* ── TABLES ── */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:380px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--gray-border);font-size:13px}
+th{font-weight:600;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--gray-bg)}
+
+/* ── CHAT ── */
+.chat-container{display:flex;flex-direction:column;gap:10px;min-height:180px;margin-bottom:12px}
+.chat-msg{max-width:82%}
+.chat-msg.bot{align-self:flex-start}
+.chat-msg.user{align-self:flex-end}
+.bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6}
+.bot .bubble{background:var(--gray-bg);border-radius:2px 12px 12px 12px}
+.user .bubble{background:var(--green-mid);color:white;border-radius:12px 2px 12px 12px}
+.input-row{display:flex;gap:8px}
+.input-row input{flex:1;min-width:0;padding:10px 14px;border:1px solid var(--gray-border);border-radius:8px;font-size:13px;font-family:inherit;outline:none}
+.input-row input:focus{border-color:var(--green-mid)}
+.input-row button{flex-shrink:0}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:5px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 12px;border:1px solid var(--gray-border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;background:var(--white)}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--green-mid)}
+
+/* ── MISC ── */
+.up{color:#27500A}.down{color:var(--red-dark)}
+.progress-bar{height:4px;background:var(--gray-bg);border-radius:2px;margin-top:8px}
+.progress-fill{height:100%;border-radius:2px}
+
+/* ── MENU ROWS (dashboard feature links) ── */
+.menu-row{display:flex;align-items:center;gap:14px;padding:13px 18px;border-bottom:1px solid var(--gray-border);cursor:pointer;transition:background .12s}
+.menu-row:last-child{border-bottom:none}
+.menu-row:hover{background:var(--gray-bg)}
+.menu-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.menu-icon svg{width:18px;height:18px}
+.menu-text{flex:1;min-width:0}
+.menu-title{font-size:13px;font-weight:500}
+.menu-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+.menu-chev{color:var(--text-muted)}
+.menu-chev svg{width:16px;height:16px}
+
+/* ══════════════════════════════════
+   MOBILE  (max 768px)
+══════════════════════════════════ */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .overlay.open{display:block}
+  .main{margin-left:0}
+  .hamburger{display:flex}
+  .topbar{padding:10px 14px}
+  .content{padding:12px}
+  .grid-4{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .grid-2{grid-template-columns:1fr}
+  .stat-value{font-size:18px}
+  .card{padding:14px}
+  .menu-row{padding:11px 14px}
+  .btn{padding:9px 14px;font-size:13px;width:100%;justify-content:center}
+  .btn-outline{width:100%}
+  table{font-size:12px}
+  th,td{padding:8px 10px}
+  .chat-msg{max-width:92%}
+}
+@media(max-width:400px){
+  .grid-4{grid-template-columns:1fr 1fr}
+  .grid-3{grid-template-columns:1fr}
+  .stat-value{font-size:16px}
+}
+
+/* Language switcher */
+.lang-switcher{position:relative;flex-shrink:0}
+.lang-btn{display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--gray-border);border-radius:7px;background:var(--white);font-size:12px;font-weight:500;cursor:pointer;color:var(--text-main);transition:all .15s}
+.lang-btn:hover{background:var(--gray-bg)}
+.lang-btn svg{width:14px;height:14px;color:var(--text-muted)}
+.lang-dropdown{display:none;position:absolute;right:0;top:calc(100% + 6px);background:var(--white);border:1px solid var(--gray-border);border-radius:9px;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,0.08);z-index:300;overflow:hidden}
+.lang-dropdown.open{display:block}
+.lang-option{display:flex;align-items:center;gap:10px;padding:9px 14px;font-size:13px;cursor:pointer;color:var(--text-main);transition:background .12s}
+.lang-option:hover{background:var(--gray-bg)}
+.lang-option.active-lang{color:var(--green-dark);font-weight:500;background:var(--green-light)}
+.lang-flag{font-size:16px;width:20px;text-align:center}
+/* Translatable content */
+.translatable{transition:opacity .2s}
+.translating{opacity:0.5}
+/* Translation banner */
+.translate-banner{display:none;background:#FAEEDA;border-bottom:1px solid #F0C67A;padding:8px 20px;font-size:12px;color:#854F0B;align-items:center;justify-content:space-between;gap:12px}
+.translate-banner.show{display:flex}
+.translate-banner button{background:none;border:none;cursor:pointer;color:#854F0B;font-size:12px;text-decoration:underline;padding:0}
+
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+
+<div class="translate-banner" id="translate-banner">
+  <span id="translate-banner-text">Translating page to <strong id="translate-lang-name">Luganda</strong>...</span>
+  <button onclick="setLang('en','English')">Switch back to English</button>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'img/logo.png' %}" alt="Kilimo Hub logo">
+      <div>
+        <div class="logo-name">Kilimo Hub</div>
+        <div class="logo-sub">Farmer Information Hub</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-section">Main</div>
+      <a href="/" class="nav-item {% block nav_home %}{% endblock %}" onclick="closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Dashboard
+      </a>
+      <a href="/crops/" class="nav-item {% block nav_crops %}{% endblock %}" onclick="closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V12m0 0C12 7 7 5 3 6c0 4 2 8 9 6m0 0c0-5 5-7 9-6-1 4-3 7-9 6"/></svg>
+        Crop Guidance
+      </a>
+      <a href="/market/" class="nav-item {% block nav_market %}{% endblock %}" onclick="closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Market Prices
+      </a>
+      <div class="nav-section">Health</div>
+      <a href="/disease/report/" class="nav-item {% block nav_disease %}{% endblock %}" onclick="closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Disease Detection
+      </a>
+      <a href="/veterinary/" class="nav-item {% block nav_vet %}{% endblock %}" onclick="closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Vet Advice
+      </a>
+      <div class="nav-section">Info</div>
+      <a href="/weather/" class="nav-item {% block nav_weather %}{% endblock %}" onclick="closeSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        Weather
+      </a>
+
+      <div class="nav-section">Language / Lulimi</div>
+      <div style="padding:6px 12px">
+        <div class="lang-switcher" style="width:100%">
+          <button class="lang-btn" style="width:100%;justify-content:space-between" onclick="toggleLangDropdown(event)">
+            <span id="current-lang-label">English</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown" id="lang-dropdown" style="left:0;right:0;min-width:unset">
+            <div class="lang-option active-lang" onclick="setLang('en','English')"><span class="lang-flag">🇬🇧</span>English</div>
+            <div class="lang-option" onclick="setLang('lug','Luganda')"><span class="lang-flag">🇺🇬</span>Luganda</div>
+            <div class="lang-option" onclick="setLang('ach','Acholi')"><span class="lang-flag">🇺🇬</span>Acholi</div>
+            <div class="lang-option" onclick="setLang('nyn','Runyankore')"><span class="lang-flag">🇺🇬</span>Runyankore</div>
+            <div class="lang-option" onclick="setLang('sog','Lusoga')"><span class="lang-flag">🇺🇬</span>Lusoga</div>
+            <div class="lang-option" onclick="setLang('teo','Ateso')"><span class="lang-flag">🇺🇬</span>Ateso</div>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+    <div class="sidebar-footer" style="padding:14px 18px;border-top:1px solid var(--gray-border)">
+      {% if user.is_authenticated %}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text-main)">{{ user.get_full_name|default:user.username }}</div>
+          <div style="font-size:11px;color:var(--text-muted)">{% if user.farmer_profile %}{{ user.farmer_profile.get_district_display }}{% endif %}</div>
+        </div>
+        <a href="/accounts/logout/" style="font-size:11px;color:var(--text-muted);border:1px solid var(--gray-border);border-radius:6px;padding:4px 8px;transition:all .12s" title="Logout">Logout</a>
+      </div>
+      {% endif %}
+      <div style="font-size:11px;color:var(--text-muted)">USSD: *217# &nbsp;|&nbsp; SMS: 8217</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    {% block topbar %}{% endblock %}
+    <div class="content">
+      {% if messages %}{% for msg in messages %}
+      <div class="alert-strip {% if msg.tags == 'success' %}info{% else %}{{ msg.tags }}{% endif %}">{{ msg }}</div>
+      {% endfor %}{% endif %}
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+
+<script>
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+</script>
+{% block extra_js %}{% endblock %}
+
+<script>
+// ── Language / Translation ──────────────────────────────
+let currentLang = localStorage.getItem('kilimo_lang') || 'en';
+const currentLangLabel = localStorage.getItem('kilimo_lang_label') || 'English';
+
+function toggleLangDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('lang-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', () => {
+  const d = document.getElementById('lang-dropdown');
+  if (d) d.classList.remove('open');
+});
+
+function setLang(code, label) {
+  document.getElementById('lang-dropdown').classList.remove('open');
+  document.getElementById('current-lang-label').textContent = label;
+
+  // Mark all active
+  document.querySelectorAll('.lang-option').forEach(o => {
+    o.classList.toggle('active-lang', o.textContent.trim() === label);
+  });
+
+  localStorage.setItem('kilimo_lang', code);
+  localStorage.setItem('kilimo_lang_label', label);
+  currentLang = code;
+
+  if (code === 'en') {
+    // Restore originals
+    document.querySelectorAll('[data-original]').forEach(el => {
+      el.textContent = el.dataset.original;
+      delete el.dataset.original;
+    });
+    document.getElementById('translate-banner').classList.remove('show');
+    return;
+  }
+
+  translatePage(code, label);
+}
+
+function translatePage(targetLang, langLabel) {
+  const banner = document.getElementById('translate-banner');
+  document.getElementById('translate-lang-name').textContent = langLabel;
+  banner.classList.add('show');
+  document.getElementById('translate-banner-text').innerHTML =
+    `Translating page to <strong>${langLabel}</strong>...`;
+
+  // Collect all translatable text nodes
+  const elements = document.querySelectorAll('.translatable');
+  if (elements.length === 0) {
+    banner.classList.remove('show');
+    return;
+  }
+
+  let done = 0;
+  elements.forEach(el => {
+    const original = el.dataset.original || el.textContent.trim();
+    if (!original || original.length < 2) { done++; checkDone(); return; }
+    if (!el.dataset.original) el.dataset.original = original;
+    el.classList.add('translating');
+
+    fetch('/i18n/translate/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken()
+      },
+      body: JSON.stringify({ text: original, target_lang: targetLang })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.translated) el.textContent = data.translated;
+      el.classList.remove('translating');
+      done++;
+      checkDone();
+    })
+    .catch(() => {
+      el.classList.remove('translating');
+      done++;
+      checkDone();
+    });
+  });
+
+  function checkDone() {
+    if (done >= elements.length) {
+      banner.classList.remove('show');
+    }
+  }
+}
+
+function getCsrfToken() {
+  const v = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
+
+// Restore language on page load
+window.addEventListener('DOMContentLoaded', () => {
+  if (currentLang && currentLang !== 'en') {
+    const label = localStorage.getItem('kilimo_lang_label') || currentLang;
+    document.getElementById('current-lang-label').textContent = label;
+    document.querySelectorAll('.lang-option').forEach(o => {
+      o.classList.toggle('active-lang', o.textContent.trim() === label);
+    });
+    translatePage(currentLang, label);
+  }
+});
+</script>
+
+</body>
+</html>

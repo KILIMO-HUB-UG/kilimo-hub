@@ -1,0 +1,92 @@
+{% extends "accounts/auth_base.html" %}
+{% block title %}Register — Kilimo Hub{% endblock %}
+{% block form %}
+<div class="auth-header">
+  <h1>Create your account</h1>
+  <p>Free for all Ugandan farmers. Get personalised crop advice, prices, and alerts for your district.</p>
+</div>
+
+{% if messages %}{% for msg in messages %}
+  <div class="msg-{% if msg.tags == 'error' %}error{% else %}success{% endif %}">{{ msg }}</div>
+{% endfor %}{% endif %}
+
+<form method="post" action="{% url 'accounts:register' %}">
+  {% csrf_token %}
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>First name</label>
+      <input type="text" name="first_name" placeholder="e.g. Ssemakula" required>
+    </div>
+    <div class="form-group">
+      <label>Last name</label>
+      <input type="text" name="last_name" placeholder="e.g. Kato">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Username</label>
+    <input type="text" name="username" placeholder="Choose a username" autocomplete="username" required>
+  </div>
+
+  <div class="form-group">
+    <label>Phone number</label>
+    <input type="tel" name="phone" placeholder="+256 7XX XXX XXX">
+  </div>
+
+  <div class="form-group">
+    <label>District</label>
+    <select name="district">
+      <option value="">Select your district</option>
+      <option>Kampala</option><option>Mukono</option><option>Wakiso</option>
+      <option>Jinja</option><option>Gulu</option><option>Lira</option>
+      <option>Mbarara</option><option>Arua</option><option>Soroti</option>
+      <option>Masaka</option><option>Mbale</option><option>Fort Portal</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <div class="pass-wrap">
+      <input type="password" name="password1" id="pw1" placeholder="At least 6 characters" autocomplete="new-password" required oninput="checkStrength(this.value)">
+      <button type="button" class="pass-toggle" onclick="togglePw('pw1',this)" aria-label="Show password">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+  </div>
+
+  <div class="form-group">
+    <label>Confirm password</label>
+    <div class="pass-wrap">
+      <input type="password" name="password2" id="pw2" placeholder="Repeat your password" autocomplete="new-password" required>
+      <button type="button" class="pass-toggle" onclick="togglePw('pw2',this)" aria-label="Show password">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <button type="submit" class="btn-submit">Create account</button>
+</form>
+
+<div class="auth-switch" style="margin-top:16px">
+  Already have an account? <a href="{% url 'accounts:login' %}">Login here</a>
+</div>
+
+<script>
+function togglePw(id){ const i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; }
+function checkStrength(v){
+  const f=document.getElementById('strength-fill');
+  let score=0;
+  if(v.length>=6)score++;
+  if(v.length>=10)score++;
+  if(/[A-Z]/.test(v))score++;
+  if(/[0-9]/.test(v))score++;
+  if(/[^A-Za-z0-9]/.test(v))score++;
+  const colors=['#E24B4A','#EF9F27','#EF9F27','#1D9E75','#0F6E56'];
+  const widths=['20%','40%','60%','80%','100%'];
+  f.style.width=score>0?widths[score-1]:'0';
+  f.style.background=score>0?colors[score-1]:'';
+}
+</script>
+{% endblock %}

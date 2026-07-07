@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Vet Advice{% endblock %}
+{% block nav_vet %}active{% endblock %}
+{% block topbar %}
+<div class="topbar">
+  <button class="hamburger" onclick="openSidebar()" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-title">Veterinary Advice</div>
+  <span class="badge badge-amber" style="flex-shrink:0">AI Vet online</span>
+</div>
+{% endblock %}
+{% block content %}
+<div class="grid-2">
+  <div>
+    <div class="section-title">Ask the vet</div>
+    <div class="card">
+      <div class="chat-container" id="vet-chat">
+        <div class="chat-msg bot"><div class="bubble">Hello! Describe your animal's symptoms or ask about vaccination, nutrition, or disease prevention. For emergencies I will give you the MAAIF vet number.</div></div>
+      </div>
+      <div class="input-row">
+        <input type="text" id="vet-input" placeholder="e.g. My cow stopped eating and has a fever">
+        <button class="btn btn-primary" onclick="sendVet()">Ask</button>
+      </div>
+    </div>
+    <div class="alert-strip danger" style="border-radius:8px;margin-top:8px">
+      <strong>Emergency:</strong> For notifiable diseases (FMD, LSD, ASFV) call MAAIF: <strong>0800 100 066</strong> (toll-free)
+    </div>
+  </div>
+  <div>
+    <div class="section-title">Vaccination calendar</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Animal</th><th>Vaccine</th><th>Frequency</th></tr></thead>
+          <tbody>
+            {% if vaccines %}
+              {% for v in vaccines %}
+              <tr><td>{{ v.animal }}</td><td>{{ v.vaccine_name }}</td><td>{{ v.booster_interval }}</td></tr>
+              {% endfor %}
+            {% else %}
+              <tr><td>Cattle</td><td>FMD vaccine</td><td>Every 6 months</td></tr>
+              <tr><td>Cattle</td><td>LSD vaccine</td><td>Annually</td></tr>
+              <tr><td>Cattle</td><td>Brucellosis</td><td>Once (heifers)</td></tr>
+              <tr><td>Poultry</td><td>Newcastle (Lasota)</td><td>Every 3 months</td></tr>
+              <tr><td>Poultry</td><td>Gumboro (IBD)</td><td>At 14 &amp; 21 days</td></tr>
+              <tr><td>Pigs</td><td>ASFV — biosecurity only</td><td>No vaccine available</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function sendVet(){
+  const inp=document.getElementById('vet-input');
+  if(!inp.value.trim())return;
+  const q=inp.value; addMsg('vet-chat',q,'user'); inp.value='';
+  fetch('/veterinary/chat/',{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},body:JSON.stringify({question:q})})
+    .then(r=>r.json()).then(d=>addMsg('vet-chat',d.answer,'bot'));
+}
+function addMsg(id,txt,who){
+  const c=document.getElementById(id);
+  const d=document.createElement('div');d.className='chat-msg '+who;
+  d.innerHTML='<div class="bubble">'+txt+'</div>';c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function getCookie(n){let v=document.cookie.match('(^|;)\s*'+n+'\s*=\s*([^;]+)');return v?v.pop():'';}
+document.getElementById('vet-input').addEventListener('keydown',e=>{if(e.key==='Enter')sendVet();});
+</script>
+{% endblock %}

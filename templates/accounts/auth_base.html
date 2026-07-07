@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Kilimo Hub{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green-dark:#0F6E56;--green-mid:#1D9E75;--green-light:#E1F5EE;--gray-bg:#F7F7F5;--gray-border:#E4E4E0;--text-main:#1a1a18;--text-muted:#6b6b65;--red:#E24B4A;--red-light:#FCEBEB;--amber-light:#FAEEDA;--amber-dark:#854F0B;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",sans-serif;background:var(--gray-bg);color:var(--text-main);min-height:100vh;display:flex;flex-direction:column;}
+.auth-wrap{flex:1;display:flex;min-height:100vh}
+
+/* Left panel — branding */
+.auth-left{width:420px;flex-shrink:0;background:var(--green-dark);display:flex;flex-direction:column;justify-content:space-between;padding:48px 44px;position:relative;overflow:hidden}
+.auth-left::before{content:"";position:absolute;top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,0.05)}
+.auth-left::after{content:"";position:absolute;bottom:-60px;left:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.brand{position:relative;z-index:1}
+.brand-logo{width:56px;height:56px;border-radius:14px;overflow:hidden;margin-bottom:20px;background:white}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-name{font-size:26px;font-weight:600;color:white;margin-bottom:6px}
+.brand-tagline{font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6}
+.feature-list{position:relative;z-index:1;display:flex;flex-direction:column;gap:14px;margin-top:40px}
+.feature-item{display:flex;align-items:flex-start;gap:12px}
+.feature-dot{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.feature-dot svg{width:16px;height:16px;stroke:rgba(255,255,255,0.9)}
+.feature-text strong{font-size:13px;font-weight:500;color:white;display:block}
+.feature-text span{font-size:12px;color:rgba(255,255,255,0.6)}
+.auth-left-footer{font-size:12px;color:rgba(255,255,255,0.45);position:relative;z-index:1}
+
+/* Right panel — form */
+.auth-right{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.auth-card{width:100%;max-width:420px}
+.auth-header{margin-bottom:28px}
+.auth-header h1{font-size:22px;font-weight:600;color:var(--text-main);margin-bottom:6px}
+.auth-header p{font-size:13px;color:var(--text-muted);line-height:1.5}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.form-group input,.form-group select{width:100%;padding:11px 14px;border:1px solid var(--gray-border);border-radius:9px;font-size:14px;font-family:inherit;outline:none;background:white;color:var(--text-main);transition:border-color .15s}
+.form-group input:focus,.form-group select:focus{border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(29,158,117,0.08)}
+.form-group input::placeholder{color:#bbb}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-submit{width:100%;padding:12px;background:var(--green-mid);color:white;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s;margin-top:4px}
+.btn-submit:hover{opacity:.9}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-muted);font-size:12px}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--gray-border)}
+.auth-switch{text-align:center;font-size:13px;color:var(--text-muted);margin-top:20px}
+.auth-switch a{color:var(--green-dark);font-weight:500}
+.auth-switch a:hover{text-decoration:underline}
+.msg-error{background:var(--red-light);border-left:3px solid var(--red);border-radius:6px;padding:10px 14px;font-size:13px;color:#7a1f1f;margin-bottom:16px;line-height:1.5}
+.msg-success{background:var(--green-light);border-left:3px solid var(--green-mid);border-radius:6px;padding:10px 14px;font-size:13px;color:var(--green-dark);margin-bottom:16px}
+.ussd-note{background:var(--gray-bg);border:1px solid var(--gray-border);border-radius:9px;padding:12px 14px;font-size:12px;color:var(--text-muted);text-align:center;margin-top:16px;line-height:1.6}
+.ussd-note strong{color:var(--text-main)}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:44px}
+.pass-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex}
+.pass-toggle svg{width:18px;height:18px}
+.strength-bar{height:3px;border-radius:2px;margin-top:6px;background:var(--gray-border);overflow:hidden}
+.strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0}
+
+/* Mobile */
+@media(max-width:700px){
+  .auth-left{display:none}
+  .auth-right{padding:32px 20px;align-items:flex-start;padding-top:48px}
+  .auth-card{max-width:100%}
+  .form-row{grid-template-columns:1fr}
+  .mobile-brand{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+  .mobile-logo{width:40px;height:40px;border-radius:10px;overflow:hidden}
+  .mobile-logo img{width:100%;height:100%;object-fit:cover}
+  .mobile-brand-name{font-size:18px;font-weight:600;color:var(--green-dark)}
+}
+@media(min-width:701px){.mobile-brand{display:none}}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <!-- LEFT BRANDING PANEL -->
+  <div class="auth-left">
+    <div>
+      <div class="brand">
+        <div class="brand-logo"><img src="{% static 'img/logo.png' %}" alt="Kilimo Hub"></div>
+        <div class="brand-name">Kilimo Hub</div>
+        <div class="brand-tagline">Your digital farming companion for Uganda</div>
+      </div>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V12m0 0C12 7 7 5 3 6c0 4 2 8 9 6m0 0c0-5 5-7 9-6-1 4-3 7-9 6"/></svg></div>
+          <div class="feature-text"><strong>Crop Guidance</strong><span>Planting calendars, AI advisor</span></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="feature-text"><strong>Live Market Prices</strong><span>All major Ugandan markets</span></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div class="feature-text"><strong>Disease Detection</strong><span>AI diagnosis from your photo</span></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+          <div class="feature-text"><strong>Weather & Vet Advice</strong><span>7-day forecasts, animal health</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-left-footer">No smartphone? Dial *217# or SMS 8217</div>
+  </div>
+
+  <!-- RIGHT FORM PANEL -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <!-- Mobile only logo -->
+      <div class="mobile-brand">
+        <div class="mobile-logo"><img src="{% static 'img/logo.png' %}" alt="Kilimo Hub"></div>
+        <div class="mobile-brand-name">Kilimo Hub</div>
+      </div>
+      {% block form %}{% endblock %}
+    </div>
+  </div>
+</div>
+</body>
+</html>
