@@ -16,25 +16,25 @@
 <div class="grid-2">
   <div>
     <div class="section-title">Submit a crop photo for diagnosis</div>
-    <div class="card" style="text-align:center;padding:28px 20px;border:2px dashed var(--gray-border)">
+    <div class="card card-panel" style="text-align:center;padding:28px 20px;border:2px dashed var(--gray-border)">
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto 12px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <div style="font-size:14px;font-weight:500;margin-bottom:6px">Upload a crop photo</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Take a clear photo of the affected leaf, stem, or fruit</div>
-      <a href="/disease/report/" class="btn btn-primary" style="display:inline-flex">Go to diagnosis form</a>
+      <div class="section-title" style="font-size:14px;font-weight:500;margin-bottom:6px">Upload a crop photo</div>
+      <div class="helper-text" style="margin-bottom:16px">Take a clear photo of the affected leaf, stem, or fruit</div>
+      <a href="/disease/report/" class="btn btn-primary">Go to diagnosis form</a>
     </div>
 
     <div class="section-title" style="margin-top:16px">Active disease alerts</div>
-    <div class="card" style="border-color:#F7C1C1;padding:14px">
+    <div class="card card-panel" style="border-color:#F7C1C1;padding:14px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
         <strong style="font-size:13px">Fall Armyworm</strong><span class="badge badge-red">High risk</span>
       </div>
-      <div style="font-size:12px;color:var(--text-muted)">Affects maize in Central Uganda. Scout whorls for frass and larvae. Treat: Emamectin benzoate 0.5g/L at dusk.</div>
+      <div class="helper-text">Affects maize in Central Uganda. Scout whorls for frass and larvae. Treat: Emamectin benzoate 0.5g/L at dusk.</div>
     </div>
-    <div class="card" style="border-color:#F7C1C1;padding:14px">
+    <div class="card card-panel" style="border-color:#F7C1C1;padding:14px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
         <strong style="font-size:13px">Coffee Wilt Disease</strong><span class="badge badge-red">Active nearby</span>
       </div>
-      <div style="font-size:12px;color:var(--text-muted)">3 farms within 5km of Mukono. Remove infected trees. Plant resistant varieties (KR clones).</div>
+      <div class="helper-text">3 farms within 5km of Mukono. Remove infected trees. Plant resistant varieties (KR clones).</div>
     </div>
   </div>
   <div>
@@ -46,16 +46,16 @@
           <strong style="font-size:13px">{{ d.name }}</strong>
           <span class="badge {% if d.severity == 'high' %}badge-red{% elif d.severity == 'medium' %}badge-amber{% else %}badge-green{% endif %}">{{ d.severity|title }}</span>
         </div>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px"><strong>Affects:</strong> {{ d.crop_affected }}</div>
-        <div style="font-size:12px;color:var(--text-muted)">{{ d.symptoms|truncatewords:20 }}</div>
+        <div class="helper-text" style="margin-bottom:4px"><strong>Affects:</strong> {{ d.crop_affected }}</div>
+        <div class="helper-text">{{ d.symptoms|truncatewords:20 }}</div>
       </div>
       {% endfor %}
     {% else %}
-      <div class="card"><div style="font-size:13px;font-weight:500;margin-bottom:4px">Fall Armyworm <em>(Spodoptera frugiperda)</em></div><div style="font-size:12px;color:var(--text-muted)">Affects: Maize. Ragged leaf damage, frass in whorl. Treat with Emamectin benzoate.</div></div>
-      <div class="card"><div style="font-size:13px;font-weight:500;margin-bottom:4px">Maize Lethal Necrosis</div><div style="font-size:12px;color:var(--text-muted)">Affects: Maize. Yellowing from leaf tip inward. No cure — uproot and destroy plants. Report to MAAIF.</div></div>
-      <div class="card"><div style="font-size:13px;font-weight:500;margin-bottom:4px">Bean Root Rot</div><div style="font-size:12px;color:var(--text-muted)">Affects: Beans. Wilting, brown root lesions. Improve drainage, use certified clean seed.</div></div>
-      <div class="card"><div style="font-size:13px;font-weight:500;margin-bottom:4px">Banana Xanthomonas Wilt</div><div style="font-size:12px;color:var(--text-muted)">Affects: Banana. Yellow wilting leaves, ooze from cut stem. Remove entire mat, disinfect tools.</div></div>
-      <div class="card"><div style="font-size:13px;font-weight:500;margin-bottom:4px">Coffee Wilt Disease</div><div style="font-size:12px;color:var(--text-muted)">Affects: Robusta coffee. Yellowing, stem browning. Plant resistant clones, remove infected trees.</div></div>
+      <div class="card"><div class="section-title" style="font-size:13px;font-weight:500;margin-bottom:4px">Fall Armyworm <em>(Spodoptera frugiperda)</em></div><div class="helper-text">Affects: Maize. Ragged leaf damage, frass in whorl. Treat with Emamectin benzoate.</div></div>
+      <div class="card"><div class="section-title" style="font-size:13px;font-weight:500;margin-bottom:4px">Maize Lethal Necrosis</div><div class="helper-text">Affects: Maize. Yellowing from leaf tip inward. No cure — uproot and destroy plants. Report to MAAIF.</div></div>
+      <div class="card"><div class="section-title" style="font-size:13px;font-weight:500;margin-bottom:4px">Bean Root Rot</div><div class="helper-text">Affects: Beans. Wilting, brown root lesions. Improve drainage, use certified clean seed.</div></div>
+      <div class="card"><div class="section-title" style="font-size:13px;font-weight:500;margin-bottom:4px">Banana Xanthomonas Wilt</div><div class="helper-text">Affects: Banana. Yellow wilting leaves, ooze from cut stem. Remove entire mat, disinfect tools.</div></div>
+      <div class="card"><div class="section-title" style="font-size:13px;font-weight:500;margin-bottom:4px">Coffee Wilt Disease</div><div class="helper-text">Affects: Robusta coffee. Yellowing, stem browning. Plant resistant clones, remove infected trees.</div></div>
     {% endif %}
   </div>
 </div>

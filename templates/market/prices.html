@@ -11,56 +11,46 @@
 </div>
 {% endblock %}
 {% block content %}
-<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-  <a href="?commodity=Maize" class="btn {% if not request.GET.commodity or request.GET.commodity == 'Maize' %}btn-primary{% else %}btn-outline{% endif %}" style="width:auto">Maize</a>
-  <a href="?commodity=Beans" class="btn {% if request.GET.commodity == 'Beans' %}btn-primary{% else %}btn-outline{% endif %}" style="width:auto">Beans</a>
-  <a href="?commodity=Coffee" class="btn {% if request.GET.commodity == 'Coffee' %}btn-primary{% else %}btn-outline{% endif %}" style="width:auto">Coffee</a>
-  <a href="?commodity=Banana" class="btn {% if request.GET.commodity == 'Banana' %}btn-primary{% else %}btn-outline{% endif %}" style="width:auto">Banana</a>
-  <a href="?commodity=Livestock" class="btn {% if request.GET.commodity == 'Livestock' %}btn-primary{% else %}btn-outline{% endif %}" style="width:auto">Livestock</a>
+<div class="button-row" style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+  {% for commodity in commodities %}
+    <a href="?commodity={{ commodity.name|urlencode }}" class="btn {% if selected_commodity and selected_commodity.name == commodity.name %}btn-primary{% elif not selected_commodity and commodity.name == 'Maize' %}btn-primary{% else %}btn-outline{% endif %}">{{ commodity.name }}</a>
+  {% endfor %}
 </div>
 
-<div class="card" style="background:#E1F5EE;border-color:#9FE1CB;margin-bottom:14px">
-  <div style="font-size:13px;color:#085041"><strong>Selling tip:</strong> Maize prices are 8% above the 30-day average. Consider selling 30–50% of your stock now while prices are high.</div>
+<div class="card card-panel--accent">
+  <div class="helper-text">
+    {% if selected_commodity %}
+      <strong>Tip:</strong> Keep an eye on {{ selected_commodity.name }} prices in your local markets. Compare at least two nearby markets before selling.
+    {% else %}
+      <strong>Tip:</strong> Browse commodity prices for the most important crops and livestock products in your area.
+    {% endif %}
+  </div>
 </div>
 
-<div class="card" style="padding:0;overflow:hidden">
+<div class="card card-panel--borderless" style="padding:0;overflow:hidden">
   <div style="padding:14px 16px;border-bottom:1px solid var(--gray-border)">
-    <div class="section-title" style="margin:0">Maize grain prices (UGX per kg)</div>
+    <div class="section-title" style="margin:0">{% if selected_commodity %}{{ selected_commodity.name }}{% else %}Commodity{% endif %} prices{% if selected_commodity %} (UGX {{ selected_commodity.get_unit_display }}){% endif %}</div>
   </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Market</th><th>District</th><th>Price (UGX/kg)</th><th>Change</th></tr></thead>
+      <thead><tr><th>Market</th><th>District</th><th>Price{% if selected_commodity %} ({{ selected_commodity.get_unit_display }}){% endif %}</th><th>Recorded</th></tr></thead>
       <tbody>
         {% if prices %}
           {% for p in prices %}
-          <tr><td><strong>{{ p.market.name }}</strong></td><td>{{ p.market.district }}</td><td style="font-weight:600;color:var(--green-dark)">{{ p.price_ugx }}</td><td>—</td></tr>
+          <tr><td><strong>{{ p.market.name }}</strong></td><td>{{ p.market.district }}</td><td style="font-weight:600;color:var(--green-dark)">{{ p.price_ugx }}</td><td>{{ p.recorded_at|date:'M d, Y' }}</td></tr>
           {% endfor %}
         {% else %}
-          <tr><td><strong>St. Balikuddembe (Owino)</strong></td><td>Kampala</td><td style="font-weight:600;color:var(--green-dark)">1,450</td><td><span class="up">+50</span></td></tr>
-          <tr><td><strong>Nakasero Market</strong></td><td>Kampala</td><td style="font-weight:600;color:var(--green-dark)">1,380</td><td><span class="up">+20</span></td></tr>
-          <tr><td><strong>Kasubi Market</strong></td><td>Kampala</td><td style="font-weight:600;color:var(--green-dark)">1,300</td><td><span class="down">-30</span></td></tr>
-          <tr><td><strong>Gulu Main Market</strong></td><td>Gulu</td><td style="font-weight:600;color:var(--green-dark)">1,180</td><td style="color:var(--text-muted)">Stable</td></tr>
-          <tr><td><strong>Arua Market</strong></td><td>Arua</td><td style="font-weight:600;color:var(--green-dark)">1,200</td><td style="color:var(--text-muted)">Stable</td></tr>
-          <tr><td><strong>Mbarara Market</strong></td><td>Mbarara</td><td style="font-weight:600;color:var(--green-dark)">1,250</td><td><span class="up">+30</span></td></tr>
+          <tr><td colspan="4" style="color:var(--text-muted);text-align:center;">No price records found for this commodity yet.</td></tr>
         {% endif %}
       </tbody>
     </table>
   </div>
 </div>
 
-<div class="card" style="padding:0;overflow:hidden;margin-top:4px">
-  <div style="padding:14px 16px;border-bottom:1px solid var(--gray-border)">
-    <div class="section-title" style="margin:0">Beans (UGX per kg)</div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Market</th><th>District</th><th>Price (UGX/kg)</th><th>Change</th></tr></thead>
-      <tbody>
-        <tr><td><strong>St. Balikuddembe</strong></td><td>Kampala</td><td style="font-weight:600;color:var(--green-dark)">3,200</td><td><span class="up">+150</span></td></tr>
-        <tr><td><strong>Gulu Main Market</strong></td><td>Gulu</td><td style="font-weight:600;color:var(--green-dark)">2,900</td><td><span class="down">-100</span></td></tr>
-        <tr><td><strong>Arua Market</strong></td><td>Arua</td><td style="font-weight:600;color:var(--green-dark)">2,750</td><td style="color:var(--text-muted)">Stable</td></tr>
-      </tbody>
-    </table>
-  </div>
+{% if selected_commodity %}
+<div class="card card-panel" style="margin-top:12px">
+  <div class="section-title" style="margin:0">About {{ selected_commodity.name }}</div>
+  <div class="helper-text">Local name: {{ selected_commodity.local_name|default:'Not available' }}. Unit: {{ selected_commodity.get_unit_display }}.</div>
 </div>
+{% endif %}
 {% endblock %}

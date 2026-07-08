@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}{{ crop.name }} — Crop Guidance{% endblock %}
+{% block nav_crops %}active{% endblock %}
+{% block topbar %}
+<div class="topbar">
+  <button class="hamburger" onclick="openSidebar()" aria-label="Open menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-title">{{ crop.name }}</div>
+  <span class="badge badge-green" style="flex-shrink:0">Crop details</span>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+  <div>
+    <div class="section-title" style="font-size:18px;margin-bottom:6px">{{ crop.name }}</div>
+    {% if crop.local_name %}<div class="helper-text" style="margin-bottom:10px">Local name: <strong>{{ crop.local_name }}</strong></div>{% endif %}
+    <div class="helper-text">{{ crop.description|linebreaksbr }}</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div>
+    <div class="card card-panel">
+      <div class="card-header">
+        <div class="section-title" style="margin:0">Crop overview</div>
+        <span class="badge badge-blue">{{ crop.days_to_maturity_min }}–{{ crop.days_to_maturity_max }} days</span>
+      </div>
+      <div class="grid-2" style="gap:14px;margin-top:12px;align-items:start">
+        <div>
+          <div class="section-title" style="font-size:13px;margin-bottom:8px">Key facts</div>
+          <div class="helper-text"><strong>Maturity time:</strong> {{ crop.days_to_maturity_min }}–{{ crop.days_to_maturity_max }} days</div>
+          <div class="helper-text"><strong>Local name:</strong> {{ crop.local_name|default:'Not specified' }}</div>
+          <div class="helper-text"><strong>Description:</strong> {{ crop.description|truncatewords:35 }}</div>
+        </div>
+        {% if crop.image %}
+        <div style="text-align:center">
+          <img src="{{ crop.image.url }}" alt="{{ crop.name }}" style="width:100%;border-radius:14px;max-height:220px;object-fit:cover;display:block">
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card card-panel">
+      <div class="section-title">Planting calendar</div>
+      {% if calendar %}
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Month</th><th>Activity</th><th>Notes</th></tr></thead>
+          <tbody>
+            {% for entry in calendar %}
+            <tr>
+              <td>{{ entry.get_month_display }}</td>
+              <td>{{ entry.get_activity_display }}</td>
+              <td>{{ entry.notes|default:'No details provided' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="helper-text">Detailed calendar information is not available yet for this crop.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="card card-panel">
+      <div class="section-title">Advice for {{ crop.name }}</div>
+      <div class="helper-text">Use this page to view the crop calendar, planting details and local names. For best results, match the calendar activities to your district and soil conditions.</div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Ask the crop advisor</div>
+      <div class="chat-container" id="crop-chat">
+        <div class="chat-msg bot"><div class="bubble">Ask about plant spacing, fertiliser timing, pest control or harvest maturity for {{ crop.name }}.</div></div>
+      </div>
+      <div class="input-row">
+        <input type="text" id="crop-input" placeholder="e.g. When should I plant maize in Mukono?">
+        <button class="btn btn-primary" onclick="sendCrop()">Ask</button>
+      </div>
+    </div>
+
+    <div class="card card-panel--accent">
+      <div class="section-title" style="margin-bottom:8px">Quick planting tips</div>
+      <div class="helper-text">
+        <strong>Start with good seed.</strong> Choose certified seed and plant in rows to improve spacing and aeration.<br>
+        <strong>Water in the first month.</strong> Keep soil moist until crops are established, especially during dry spells.<br>
+        <strong>Scout regularly.</strong> Check for insects and diseases weekly so you can act early.
+      </div>
+    </div>
+
+    <a href="/crops/" class="btn btn-outline btn-block">Back to crop library</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function sendCrop(){
+  const inp=document.getElementById('crop-input');
+  if(!inp.value.trim())return;
+  const q=inp.value; addMsg('crop-chat',q,'user'); inp.value='';
+  fetch('/crops/chat/',{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},body:JSON.stringify({question:q})})
+    .then(r=>r.json()).then(d=>addMsg('crop-chat',d.answer,'bot'));
+}
+function addMsg(id,txt,who){
+  const c=document.getElementById(id);
+  const d=document.createElement('div');d.className='chat-msg '+who;
+  d.innerHTML='<div class="bubble">'+txt+'</div>';c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function getCookie(n){let v=document.cookie.match('(^|;)\s*'+n+'\s*=\s*([^;]+)');return v?v.pop():'';}
+document.getElementById('crop-input').addEventListener('keydown',e=>{if(e.key==='Enter')sendCrop();});
+</script>
+{% endblock %}
