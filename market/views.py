@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from .models import Market, Commodity, MarketPrice
 
-@login_required
+
 def price_list(request):
     commodity_name = request.GET.get('commodity', 'Maize')
     commodities = Commodity.objects.all()
@@ -16,7 +15,7 @@ def price_list(request):
         'prices': prices, 'commodities': commodities, 'selected_commodity': commodity
     })
 
-@login_required
+
 def market_list(request):
     markets = Market.objects.all()
     return render(request, 'market/markets.html', {'markets': markets})

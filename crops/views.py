@@ -1,12 +1,9 @@
-from django.contrib.auth.decorators import login_required
 import json
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt
 from .models import Crop, CropCalendar, FarmerCrop
 
-@login_required
 def crop_list(request):
     crops = Crop.objects.all()
     return render(request, 'crops/list.html', {'crops': crops})
