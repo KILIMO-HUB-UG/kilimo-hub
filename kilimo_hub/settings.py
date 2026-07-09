@@ -10,7 +10,13 @@ except ImportError:
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-kilimo-hub-dev-key-change-in-production')
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+allowed_hosts = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '*').split(',') if host.strip()]
+if not allowed_hosts:
+    allowed_hosts = ['*']
+render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_host and render_host not in allowed_hosts:
+    allowed_hosts.append(render_host)
+ALLOWED_HOSTS = allowed_hosts
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -54,7 +60,14 @@ TEMPLATES = [{
 }]
 
 WSGI_APPLICATION = 'kilimo_hub.wsgi.application'
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://struggle-moonlight-arise.ngrok-free.app','https://struggle-moonlight-arise.ngrok-free.dev']
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'https://struggle-moonlight-arise.ngrok-free.app',
+    'https://struggle-moonlight-arise.ngrok-free.dev',
+]
+render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_host:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{render_host}')
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
