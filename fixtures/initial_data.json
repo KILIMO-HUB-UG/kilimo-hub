@@ -1,0 +1,504 @@
+[
+{
+  "model": "crops.crop",
+  "pk": 1,
+  "fields": {
+    "name": "Maize",
+    "local_name": "Emere",
+    "description": "Maize is a staple crop grown widely across Uganda. It prefers well-drained soil and regular rainfall. Ensure proper spacing and timely weeding to maximize yields.",
+    "image": "",
+    "days_to_maturity_min": 80,
+    "days_to_maturity_max": 90,
+    "created_at": "2026-07-08T16:39:29.919Z"
+  }
+},
+{
+  "model": "crops.crop",
+  "pk": 2,
+  "fields": {
+    "name": "Beans",
+    "local_name": "Obugobe",
+    "description": "Beans are nutrient-rich legumes often grown during the rainy season. They need fertile soil and careful pest management, especially against aphids and bean fly.",
+    "image": "",
+    "days_to_maturity_min": 60,
+    "days_to_maturity_max": 75,
+    "created_at": "2026-07-08T16:39:29.958Z"
+  }
+},
+{
+  "model": "crops.crop",
+  "pk": 3,
+  "fields": {
+    "name": "Coffee",
+    "local_name": "Kawuwa",
+    "description": "Robusta coffee thrives in Uganda's humid tropics. It takes longer to mature and needs shaded conditions, regular pruning, and disease management.",
+    "image": "",
+    "days_to_maturity_min": 360,
+    "days_to_maturity_max": 420,
+    "created_at": "2026-07-08T16:39:29.991Z"
+  }
+},
+{
+  "model": "crops.crop",
+  "pk": 4,
+  "fields": {
+    "name": "Banana",
+    "local_name": "Matoke",
+    "description": "Banana is a perennial staple crop. It grows best in fertile, moisture-retentive soil, and requires mulching, regular weeding, and good irrigation.",
+    "image": "",
+    "days_to_maturity_min": 270,
+    "days_to_maturity_max": 360,
+    "created_at": "2026-07-08T16:39:30.027Z"
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 1,
+  "fields": {
+    "crop": 1,
+    "district": "National",
+    "activity": "land_prep",
+    "month": 1,
+    "notes": "Prepare land by ploughing and ridging during the onset of rains."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 2,
+  "fields": {
+    "crop": 1,
+    "district": "National",
+    "activity": "planting",
+    "month": 2,
+    "notes": "Plant seed at 75cm row spacing with good quality seed."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 3,
+  "fields": {
+    "crop": 1,
+    "district": "National",
+    "activity": "weeding",
+    "month": 4,
+    "notes": "Weed twice before tasseling and remove competing grass."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 4,
+  "fields": {
+    "crop": 1,
+    "district": "National",
+    "activity": "harvest",
+    "month": 6,
+    "notes": "Harvest when kernels are dry and around 80-90 days after planting."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 5,
+  "fields": {
+    "crop": 2,
+    "district": "National",
+    "activity": "land_prep",
+    "month": 1,
+    "notes": "Prepare a fine seedbed and add compost before planting."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 6,
+  "fields": {
+    "crop": 2,
+    "district": "National",
+    "activity": "planting",
+    "month": 2,
+    "notes": "Plant beans in rows and cover lightly with soil."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 7,
+  "fields": {
+    "crop": 2,
+    "district": "National",
+    "activity": "weeding",
+    "month": 3,
+    "notes": "Keep the field weed-free especially during flowering."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 8,
+  "fields": {
+    "crop": 2,
+    "district": "National",
+    "activity": "harvest",
+    "month": 4,
+    "notes": "Harvest pods when they are dry and brown."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 9,
+  "fields": {
+    "crop": 3,
+    "district": "National",
+    "activity": "planting",
+    "month": 2,
+    "notes": "Plant coffee seedlings in shaded areas with well-drained soil."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 10,
+  "fields": {
+    "crop": 3,
+    "district": "National",
+    "activity": "fertilizing",
+    "month": 4,
+    "notes": "Apply fertilizer after establishment and during the main growth season."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 11,
+  "fields": {
+    "crop": 3,
+    "district": "National",
+    "activity": "pest_control",
+    "month": 6,
+    "notes": "Monitor for coffee wilt and berry borer and treat promptly."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 12,
+  "fields": {
+    "crop": 3,
+    "district": "National",
+    "activity": "harvest",
+    "month": 12,
+    "notes": "Harvest ripe cherries throughout the year as they mature."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 13,
+  "fields": {
+    "crop": 4,
+    "district": "National",
+    "activity": "land_prep",
+    "month": 3,
+    "notes": "Prepare planting holes and add organic matter."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 14,
+  "fields": {
+    "crop": 4,
+    "district": "National",
+    "activity": "planting",
+    "month": 4,
+    "notes": "Plant suckers with proper spacing and support."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 15,
+  "fields": {
+    "crop": 4,
+    "district": "National",
+    "activity": "weeding",
+    "month": 6,
+    "notes": "Maintain clean mats and remove weeds around plants."
+  }
+},
+{
+  "model": "crops.cropcalendar",
+  "pk": 16,
+  "fields": {
+    "crop": 4,
+    "district": "National",
+    "activity": "harvest",
+    "month": 12,
+    "notes": "Harvest bunches when fingers are full and green."
+  }
+},
+{
+  "model": "market.market",
+  "pk": 1,
+  "fields": {
+    "name": "St. Balikuddembe (Owino)",
+    "district": "Kampala",
+    "region": "Kampala",
+    "latitude": null,
+    "longitude": null
+  }
+},
+{
+  "model": "market.market",
+  "pk": 2,
+  "fields": {
+    "name": "Nakasero Market",
+    "district": "Kampala",
+    "region": "Kampala",
+    "latitude": null,
+    "longitude": null
+  }
+},
+{
+  "model": "market.market",
+  "pk": 3,
+  "fields": {
+    "name": "Kasubi Market",
+    "district": "Kampala",
+    "region": "Kampala",
+    "latitude": null,
+    "longitude": null
+  }
+},
+{
+  "model": "market.market",
+  "pk": 4,
+  "fields": {
+    "name": "Gulu Main Market",
+    "district": "Gulu",
+    "region": "Gulu",
+    "latitude": null,
+    "longitude": null
+  }
+},
+{
+  "model": "market.market",
+  "pk": 5,
+  "fields": {
+    "name": "Arua Market",
+    "district": "Arua",
+    "region": "Arua",
+    "latitude": null,
+    "longitude": null
+  }
+},
+{
+  "model": "market.commodity",
+  "pk": 1,
+  "fields": {
+    "name": "Maize",
+    "local_name": "Emere",
+    "category": "crop",
+    "unit": "kg"
+  }
+},
+{
+  "model": "market.commodity",
+  "pk": 2,
+  "fields": {
+    "name": "Beans",
+    "local_name": "Obugobe",
+    "category": "crop",
+    "unit": "kg"
+  }
+},
+{
+  "model": "market.commodity",
+  "pk": 3,
+  "fields": {
+    "name": "Coffee",
+    "local_name": "Kawuwa",
+    "category": "crop",
+    "unit": "kg"
+  }
+},
+{
+  "model": "market.commodity",
+  "pk": 4,
+  "fields": {
+    "name": "Banana",
+    "local_name": "Matoke",
+    "category": "crop",
+    "unit": "kg"
+  }
+},
+{
+  "model": "market.commodity",
+  "pk": 5,
+  "fields": {
+    "name": "Livestock",
+    "local_name": "Ebibirizi",
+    "category": "crop",
+    "unit": "head"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 1,
+  "fields": {
+    "market": 1,
+    "commodity": 1,
+    "price_ugx": "1450.00",
+    "price_min": "1377.50",
+    "price_max": "1522.50",
+    "recorded_at": "2026-07-08T16:39:30.138Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 2,
+  "fields": {
+    "market": 2,
+    "commodity": 1,
+    "price_ugx": "1380.00",
+    "price_min": "1311.00",
+    "price_max": "1449.00",
+    "recorded_at": "2026-07-08T16:39:30.147Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 3,
+  "fields": {
+    "market": 3,
+    "commodity": 1,
+    "price_ugx": "1300.00",
+    "price_min": "1235.00",
+    "price_max": "1365.00",
+    "recorded_at": "2026-07-08T16:39:30.154Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 4,
+  "fields": {
+    "market": 4,
+    "commodity": 1,
+    "price_ugx": "1180.00",
+    "price_min": "1121.00",
+    "price_max": "1239.00",
+    "recorded_at": "2026-07-08T16:39:30.162Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 5,
+  "fields": {
+    "market": 5,
+    "commodity": 1,
+    "price_ugx": "1200.00",
+    "price_min": "1140.00",
+    "price_max": "1260.00",
+    "recorded_at": "2026-07-08T16:39:30.172Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 6,
+  "fields": {
+    "market": 1,
+    "commodity": 2,
+    "price_ugx": "3200.00",
+    "price_min": "3040.00",
+    "price_max": "3360.00",
+    "recorded_at": "2026-07-08T16:39:30.180Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 7,
+  "fields": {
+    "market": 4,
+    "commodity": 2,
+    "price_ugx": "2900.00",
+    "price_min": "2755.00",
+    "price_max": "3045.00",
+    "recorded_at": "2026-07-08T16:39:30.187Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 8,
+  "fields": {
+    "market": 5,
+    "commodity": 2,
+    "price_ugx": "2750.00",
+    "price_min": "2612.50",
+    "price_max": "2887.50",
+    "recorded_at": "2026-07-08T16:39:30.196Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 9,
+  "fields": {
+    "market": 1,
+    "commodity": 3,
+    "price_ugx": "7800.00",
+    "price_min": "7410.00",
+    "price_max": "8190.00",
+    "recorded_at": "2026-07-08T16:39:30.205Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 10,
+  "fields": {
+    "market": 2,
+    "commodity": 3,
+    "price_ugx": "7600.00",
+    "price_min": "7220.00",
+    "price_max": "7980.00",
+    "recorded_at": "2026-07-08T16:39:30.213Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 11,
+  "fields": {
+    "market": 3,
+    "commodity": 4,
+    "price_ugx": "900.00",
+    "price_min": "855.00",
+    "price_max": "945.00",
+    "recorded_at": "2026-07-08T16:39:30.222Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 12,
+  "fields": {
+    "market": 5,
+    "commodity": 4,
+    "price_ugx": "880.00",
+    "price_min": "836.00",
+    "price_max": "924.00",
+    "recorded_at": "2026-07-08T16:39:30.230Z",
+    "recorded_by": "Sample data"
+  }
+},
+{
+  "model": "market.marketprice",
+  "pk": 13,
+  "fields": {
+    "market": 4,
+    "commodity": 5,
+    "price_ugx": "420000.00",
+    "price_min": "399000.00",
+    "price_max": "441000.00",
+    "recorded_at": "2026-07-08T16:39:30.238Z",
+    "recorded_by": "Sample data"
+  }
+}
+]
