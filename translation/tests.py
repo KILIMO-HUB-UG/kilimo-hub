@@ -28,7 +28,11 @@ class TranslationServiceTests(TestCase):
         mock_post.assert_called_once_with(
             self.api_url,
             json={'source_language': 'en', 'target_language': 'lug', 'text': 'hello'},
-            headers={'Authorization': 'Bearer test-key', 'Content-Type': 'application/json'},
+            headers={
+                'Authorization': 'Bearer test-key',
+                'X-API-Key': 'test-key',
+                'Content-Type': 'application/json',
+            },
             timeout=10,
         )
 

@@ -32,6 +32,7 @@ def translate_text(text, source_lang='en', target_lang='lug'):
 
     headers = {
         'Authorization': f'Bearer {api_key}',
+        'X-API-Key': api_key,
         'Content-Type': 'application/json',
     }
     payload = {
@@ -69,3 +70,6 @@ def translate_text(text, source_lang='en', target_lang='lug'):
 def translate_batch(texts, source_lang='en', target_lang='lug'):
     """Translate a list of strings. Returns list of translated strings."""
     return [translate_text(t, source_lang, target_lang) for t in texts]
+
+
+
