@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .models import Crop, CropCalendar, FarmerCrop
 
+
 def crop_list(request):
     crops = Crop.objects.all()
     return render(request, 'crops/list.html', {'crops': crops})

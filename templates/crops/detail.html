@@ -71,14 +71,18 @@
       <div class="helper-text">Use this page to view the crop calendar, planting details and local names. For best results, match the calendar activities to your district and soil conditions.</div>
     </div>
 
-    <div class="card">
-      <div class="section-title">Ask the crop advisor</div>
-      <div class="chat-container" id="crop-chat">
-        <div class="chat-msg bot"><div class="bubble">Ask about plant spacing, fertiliser timing, pest control or harvest maturity for {{ crop.name }}.</div></div>
-      </div>
-      <div class="input-row">
-        <input type="text" id="crop-input" placeholder="e.g. When should I plant maize in Mukono?">
-        <button class="btn btn-primary" onclick="sendCrop()">Ask</button>
+    <!-- AI Advisor Section with Inputs Fixed -->
+    <div class="section-title">🌾 AI Crop Advisor</div>
+    <div class="helper-text" style="margin-bottom:12px;">
+      Ask questions about planting, fertilizers, pests, irrigation, harvesting or crop diseases and receive instant guidance.
+    </div>
+    
+    <!-- Added Chat Window Box and Input Element for JavaScript -->
+    <div class="card card-panel">
+      <div id="crop-chat" style="max-height: 250px; overflow-y: auto; margin-bottom: 10px;"></div>
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="crop-input" placeholder="Type your farming question..." style="flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+        <button onclick="sendCrop()" class="btn btn-primary" style="padding: 8px 16px;">Ask</button>
       </div>
     </div>
 
@@ -91,6 +95,78 @@
       </div>
     </div>
 
+    <!-- Agricultural Support Network -->
+    <div class="card card-panel">
+      <div class="section-title" style="margin-bottom:10px;">🌍 Agricultural Support Network</div>
+      <div class="helper-text" style="margin-bottom:20px;">
+        Kilimo Hub is more than a crop advisory platform. We connect farmers with
+        trusted organizations that provide agricultural training, extension
+        services, quality farm inputs, financial support and market opportunities.
+      </div>
+
+      <div class="grid-2" style="gap:18px;">
+        <!-- Government -->
+        <div class="card" style="padding:18px;">
+          <h4>🏛 Government Support</h4>
+          <p class="helper-text">Access extension officers, agricultural policies and government programmes through NARO.</p>
+          <ul class="helper-text" style="padding-left:18px;">
+            <li>Extension services</li>
+            <li>Improved seed varieties</li>
+            <li>Agricultural research</li>
+          </ul>
+          <div style="margin-top:15px;">
+            <a href="https://www.naro.go.ug/" target="_blank" class="btn btn-outline btn-block" style="margin-bottom:10px;">Visit NARO</a>
+          </div> <!-- Fixed extra </a> tags and indentation here -->
+        </div>
+
+        <!-- NGOs -->
+        <div class="card" style="padding:18px;">
+          <h4>🤝 NGO Support</h4>
+          <p class="helper-text">Receive farmer training, quality inputs and climate-smart farming support through trusted agricultural NGOs.</p>
+          <ul class="helper-text" style="padding-left:18px;">
+            <li>One Acre Fund</li>
+            <li>Self Help Africa</li>
+            <li>Farmer education</li>
+          </ul>
+          <div style="margin-top:15px;">
+            <a href="https://oneacrefund.org" target="_blank" class="btn btn-outline btn-block">Learn More</a>
+          </div>
+        </div>
+
+        <!-- Financial -->
+        <div class="card" style="padding:18px;">
+          <h4>💰 Financial Partners</h4>
+          <p class="helper-text">Access agricultural financing and investment opportunities for smallholder farmers.</p>
+          <ul class="helper-text" style="padding-left:18px;">
+            <li>Farm loans</li>
+            <li>Input financing</li>
+            <li>Agricultural investment</li>
+          </ul>
+        </div>
+
+        <!-- Cooperatives -->
+        <div class="card" style="padding:18px;">
+          <h4>🌾 Farmer Cooperatives</h4>
+          <p class="helper-text">Join farmer groups to access better markets, training and bulk purchasing opportunities.</p>
+          <ul class="helper-text" style="padding-left:18px;">
+            <li>Market access</li>
+            <li>Collective bargaining</li>
+            <li>Knowledge sharing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Help -->
+    <div class="card card-panel--accent">
+      <div class="section-title">🚜 Need Immediate Assistance?</div>
+      <div class="helper-text" style="margin-top:10px;">
+        If your crops are severely affected by pests, diseases or extreme weather,
+        don't wait. Contact your nearest agricultural extension officer or one of
+        our recommended agricultural partners for professional support.
+      </div>
+    </div>
+
     <a href="/crops/" class="btn btn-outline btn-block">Back to crop library</a>
   </div>
 </div>
@@ -100,17 +176,44 @@
 <script>
 function sendCrop(){
   const inp=document.getElementById('crop-input');
-  if(!inp.value.trim())return;
-  const q=inp.value; addMsg('crop-chat',q,'user'); inp.value='';
-  fetch('/crops/chat/',{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},body:JSON.stringify({question:q})})
-    .then(r=>r.json()).then(d=>addMsg('crop-chat',d.answer,'bot'));
+  if(!inp || !inp.value.trim()) return;
+  const q=inp.value; 
+  addMsg('crop-chat', q, 'user'); 
+  inp.value='';
+  
+  fetch('/crops/chat/', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'X-CSRFToken':getCookie('csrftoken')
+    },
+    body:JSON.stringify({question:q})
+  })
+  .then(r=>r.json())
+  .then(d=>addMsg('crop-chat', d.answer, 'bot'));
 }
-function addMsg(id,txt,who){
+
+function addMsg(id, txt, who){
   const c=document.getElementById(id);
-  const d=document.createElement('div');d.className='chat-msg '+who;
-  d.innerHTML='<div class="bubble">'+txt+'</div>';c.appendChild(d);c.scrollTop=c.scrollHeight;
+  if(!c) return;
+  const d=document.createElement('div');
+  d.className='chat-msg '+who;
+  d.innerHTML='<div class="bubble">'+txt+'</div>';
+  c.appendChild(d);
+  c.scrollTop=c.scrollHeight;
 }
-function getCookie(n){let v=document.cookie.match('(^|;)\s*'+n+'\s*=\s*([^;]+)');return v?v.pop():'';}
-document.getElementById('crop-input').addEventListener('keydown',e=>{if(e.key==='Enter')sendCrop();});
+
+function getCookie(n){
+  let v=document.cookie.match('(^|;)\\s*'+n+'\\s*=\\s*([^;]+)');
+  return v?v.pop():'';
+}
+
+// Check if element exists before setting up listener to prevent console errors
+const inputEl = document.getElementById('crop-input');
+if(inputEl) {
+  inputEl.addEventListener('keydown', e => {
+    if(e.key==='Enter') sendCrop();
+  });
+}
 </script>
 {% endblock %}

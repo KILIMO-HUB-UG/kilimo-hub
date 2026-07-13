@@ -67,10 +67,25 @@ def build_farming_advisory(forecast_days):
     else:
         return "Favorable conditions for most field operations. Good week for land preparation, weeding, and pesticide application."
 
+def is_configured_api_key(api_key):
+    if not api_key:
+        return False
+    cleaned = api_key.strip().lower()
+    placeholders = {
+        'demo',
+        'your_openweather_api_key_here',
+        'your_openweather_api_key',
+        'your_api_key_here',
+        'changeme',
+        'replace-me',
+    }
+    return cleaned not in placeholders and len(cleaned) > 10
+
+
 def fetch_from_owm(district):
     """Fetch live data from OpenWeatherMap One Call API."""
     api_key = settings.OPENWEATHER_API_KEY
-    if not api_key or api_key == 'demo':
+    if not is_configured_api_key(api_key):
         return None
 
     coords = DISTRICT_COORDS.get(district, DISTRICT_COORDS['Mukono'])
@@ -206,7 +221,7 @@ def get_weather(district):
             {'day': 'Today', 'temp_hi': 26, 'temp_lo': 18, 'desc': 'Partly cloudy', 'rain_mm': 0},
             {'day': 'Tomorrow', 'temp_hi': 24, 'temp_lo': 17, 'desc': 'Rain', 'rain_mm': 12},
         ],
-        'advisory': 'Configure your OPENWEATHER_API_KEY in .env to see live weather data.',
+        'advisory': 'Set a real OPENWEATHER_API_KEY in your .env file to see live weather data.',
     }
 
 
